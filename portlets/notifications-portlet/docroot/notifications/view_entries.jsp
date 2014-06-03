@@ -26,8 +26,8 @@ List<UserNotificationEvent> userNotificationEvents = null;
 int userNotificationEventsCount = 0;
 
 if (filter.equals("unread")) {
-	userNotificationEvents = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEvents(themeDisplay.getUserId(), false, start, end);
-	userNotificationEventsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
+	userNotificationEvents = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsByType(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, false, start, end);
+	userNotificationEventsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCountByType(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, false);
 }
 else {
 	userNotificationEvents = UserNotificationEventLocalServiceUtil.getUserNotificationEvents(themeDisplay.getUserId(), start, end);
@@ -72,7 +72,7 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 	}
 
 	NotificationEvent notificationEvent = NotificationEventLocalServiceUtil.fetchNotificationEvent(userNotificationEvent.getNotificationEventId());
-	
+
 	if (notificationEvent == null) {
 		continue;
 	}
