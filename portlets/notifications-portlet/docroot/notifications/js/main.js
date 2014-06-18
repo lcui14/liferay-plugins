@@ -278,49 +278,6 @@ AUI().use(
 				);
 			},
 
-			_markAsRead: function(event, fullView, markAllAsRead) {
-				event.preventDefault();
-
-				var instance = this;
-
-				var currentRow;
-
-				var currentTarget = event.currentTarget;
-
-				if (instance._hasRequestSent(null, currentTarget.attr('href'))) {
-					return;
-				}
-
-				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
-
-				if (!markAllAsRead) {
-					currentRow = currentTarget.ancestor('.user-notification');
-					currentRow.hide().placeAfter(loadingRow);
-				}
-
-				A.io.request(
-					currentTarget.attr('href'),
-					{
-						after: {
-							success: function() {
-								var response = this.get('responseData');
-
-								if (response.success) {
-
-									if (!markAllAsRead) {
-										currentRow.remove();
-										loadingRow.remove();
-									}
-
-									instance._updateNotifications(fullView, markAllAsRead);
-								}
-							}
-						},
-						dataType: 'JSON'
-					}
-				);
-			},
-
 			_getActionURL: function(name, userNotificationEventIds) {
 				var instance = this;
 
@@ -434,6 +391,49 @@ AUI().use(
 						return false;
 					}
 				}
+			},
+
+			_markAsRead: function(event, fullView, markAllAsRead) {
+				event.preventDefault();
+
+				var instance = this;
+
+				var currentRow;
+
+				var currentTarget = event.currentTarget;
+
+				if (instance._hasRequestSent(null, currentTarget.attr('href'))) {
+					return;
+				}
+
+				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+				if (!markAllAsRead) {
+					currentRow = currentTarget.ancestor('.user-notification');
+					currentRow.hide().placeAfter(loadingRow);
+				}
+
+				A.io.request(
+					currentTarget.attr('href'),
+					{
+						after: {
+							success: function() {
+								var response = this.get('responseData');
+
+								if (response.success) {
+
+									if (!markAllAsRead) {
+										currentRow.remove();
+										loadingRow.remove();
+									}
+
+									instance._updateNotifications(fullView, markAllAsRead);
+								}
+							}
+						},
+						dataType: 'JSON'
+					}
+				);
 			},
 
 			_onPollerUpdate: function(response) {
